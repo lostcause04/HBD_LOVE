@@ -28,12 +28,15 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCandleCount();
   }
 
-  cake.addEventListener("click", function (event) {
+  // ✅ Generate exactly 21 candles at page load
+  function generateCandles(count) {
     const rect = cake.getBoundingClientRect();
-    const left = event.clientX - rect.left;
-    const top = event.clientY - rect.top;
-    addCandle(left, top);
-  });
+    for (let i = 0; i < count; i++) {
+      const left = Math.random() * (rect.width - 20); // keep within cake
+      const top = Math.random() * (rect.height / 2);  // top half area
+      addCandle(left, top);
+    }
+  }
 
   function isBlowing() {
     const bufferLength = analyser.frequencyBinCount;
@@ -46,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     let average = sum / bufferLength;
 
-    return average > 40; //
+    return average > 40; // adjust sensitivity if needed
   }
 
   function blowOutCandles() {
@@ -83,4 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.log("getUserMedia not supported on your browser!");
   }
+
+  // 🎉 Create 21 candles automatically
+  generateCandles(21);
 });
