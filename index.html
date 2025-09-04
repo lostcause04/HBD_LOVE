@@ -1,118 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Countdown</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      color: #fff;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff9ec4, #ff66a3);
+    }
 
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // Unlock time: 6th Sept 2025, 00:00 local time
-    const unlockDate = new Date("2025-09-06T00:00:00");
+    h1 {
+      margin-top: 40px;
+      font-size: 2.5em;
+      color: #fff;
+      text-shadow: 2px 2px 6px rgba(255, 0, 100, 0.6);
+    }
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = unlockDate - now;
+    #countdown {
+      margin-top: 20px;
+      font-size: 1.8em;
+    }
 
-      if (diff <= 0) {
-        // Time reached → reload to show cake
-        location.reload();
-        return;
+    #countdown h3 {
+      display: inline-block;
+      margin: 0 15px;
+      font-size: 2em;
+      color: #ffe4f2;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .cake {
+      margin: 60px auto;
+      width: 160px;
+      height: 200px;
+      position: relative;
+      display: none;
+    }
+
+    .layer {
+      width: 160px;
+      height: 50px;
+      border-radius: 10px;
+      position: absolute;
+      left: 0;
+    }
+    .layer-bottom { bottom: 0; background: #ff99cc; }
+    .layer-middle { bottom: 50px; background: #ffb6c1; }
+    .layer-top { bottom: 100px; background: #ffc0cb; }
+
+    .icing {
+      width: 160px;
+      height: 30px;
+      background: #fff;
+      border-radius: 15px;
+      position: absolute;
+      top: -20px;
+    }
+
+    .candles {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      top: -50px;
+      width: 100%;
+    }
+
+    .candle {
+      width: 10px;
+      height: 40px;
+      background: #fff;
+      margin: 0 5px;
+      position: relative;
+    }
+
+    .flame {
+      width: 10px;
+      height: 10px;
+      background: orange;
+      border-radius: 50%;
+      position: absolute;
+      top: -12px;
+      left: 0;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { transform: scale(1); opacity: 1; }
+      to { transform: scale(1.2); opacity: 0.7; }
+    }
+
+    /* Floating Balloons & Hearts */
+    .floating {
+      position: absolute;
+      font-size: 2em;
+      animation: floatUp 10s linear infinite;
+      opacity: 0.9;
+    }
+
+    .floating:nth-child(odd) {
+      font-size: 2.5em;
+      animation-duration: 12s;
+    }
+    .floating:nth-child(even) {
+      font-size: 3em;
+      animation-duration: 9s;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh) rotate(0deg); }
+      to { transform: translateY(-120vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Birthday Countdown 🎉</h1>
+  <div id="countdown"></div>
+
+  <div class="cake" id="cake">
+    <div class="icing"></div>
+    <div class="layer layer-top"></div>
+    <div class="layer layer-middle"></div>
+    <div class="layer layer-bottom"></div>
+    <div class="candles" id="candles"></div>
+  </div>
+
+  <!-- Floating balloons 🎈 + hearts 💖 -->
+  <div class="floating">🎈</div>
+  <div class="floating">🎈</div>
+  <div class="floating">🎈</div>
+  <div class="floating">🎈</div>
+  <div class="floating">🎈</div>
+  <div class="floating">💖</div>
+  <div class="floating">💖</div>
+  <div class="floating">💖</div>
+  <div class="floating">💖</div>
+  <div class="floating">💖</div>
+
+  <script>
+    // 🎂 Birthday Countdown
+    const birthday = new Date("Sep 10, 2025 00:00:00").getTime();
+    const countdownElement = document.getElementById("countdown");
+    const cake = document.getElementById("cake");
+    const candlesContainer = document.getElementById("candles");
+
+    const timer = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = birthday - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = 
+        `<h3>${days}d</h3><h3>${hours}h</h3><h3>${minutes}m</h3><h3>${seconds}s</h3>`;
+
+      if (distance < 0) {
+        clearInterval(timer);
+        countdownElement.innerHTML = "<h2>🎂 It's Cake Time! 🎂</h2>";
+        cake.style.display = "block";
+
+        // Add candles (exactly 21)
+        for (let i = 0; i < 21; i++) {
+          const candle = document.createElement("div");
+          candle.classList.add("candle");
+          const flame = document.createElement("div");
+          flame.classList.add("flame");
+          candle.appendChild(flame);
+          candlesContainer.appendChild(candle);
+        }
       }
+    }, 1000);
+  </script>
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.body.innerHTML = `
-        <div style="
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          height:100vh;
-          font-family: 'Comic Sans MS', cursive, sans-serif;
-          text-align:center;
-          color:#fff;
-          background: linear-gradient(135deg, #ff99cc, #ff6699, #ff3366);
-          background-size: 400% 400%;
-          animation: gradientShift 10s ease infinite;
-          position: relative;
-          overflow:hidden;
-        ">
-          <div>
-            <h1 style="font-size:3em; margin-bottom:10px;">💖 Not Yet! 💖</h1>
-            <p style="font-size:1.2em;">This surprise unlocks at<br><b>🎂 12:00 AM, 6th Sept 2025 🎈</b></p>
-            <h2 style="margin-top:20px;">Countdown:</h2>
-            <h3 style="font-size:2em;">${days}d ${hours}h ${minutes}m ${seconds}s</h3>
-          </div>
-
-          <!-- floating hearts and balloons -->
-          <div class="floating">🎈</div>
-          <div class="floating">💖</div>
-          <div class="floating">🎈</div>
-          <div class="floating">💖</div>
-          <div class="floating">🎈</div>
-        </div>
-
-        <style>
-          @keyframes gradientShift {
-            0%{background-position:0% 50%}
-            50%{background-position:100% 50%}
-            100%{background-position:0% 50%}
-          }
-          .floating {
-            position:absolute;
-            font-size:2.5em;
-            animation: floatUp 8s linear infinite;
-            opacity:0.8;
-          }
-          .floating:nth-child(2) { left:10%; animation-delay:0s; }
-          .floating:nth-child(3) { left:30%; animation-delay:2s; }
-          .floating:nth-child(4) { left:50%; animation-delay:4s; }
-          .floating:nth-child(5) { left:70%; animation-delay:6s; }
-          .floating:nth-child(6) { left:90%; animation-delay:1s; }
-
-          @keyframes floatUp {
-            0% { bottom:-10%; transform:translateY(0) rotate(0deg); }
-            100% { bottom:110%; transform:translateY(-100vh) rotate(360deg); }
-          }
-        </style>
-      `;
-    }
-
-    const now = new Date();
-    if (now < unlockDate) {
-      updateCountdown();
-      setInterval(updateCountdown, 1000); // update every second
-    }
-    // else → do nothing, cake loads normally
-  });
-</script>
-
-
-  
-    <meta charset="UTF-8" />
-    <title>Candle Blow</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
-    />
-    <link rel="stylesheet" href="./style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
-  </head>
-  <body>
-    <div class="candle-count-display">
-      Candles on the Cake: <span id="candleCount">0</span>
-    </div>
-    <div class="cake">
-      <div class="plate"></div>
-      <div class="layer layer-bottom"></div>
-      <div class="layer layer-middle"></div>
-      <div class="layer layer-top"></div>
-      <div class="icing"></div>
-      <div class="drip drip1"></div>
-      <div class="drip drip2"></div>
-      <div class="drip drip3"></div>
-    </div>
-    <script src="script.js"></script>
-  </body>
+</body>
 </html>
