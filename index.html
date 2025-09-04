@@ -1,80 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-   <script>
-  // Unlock date (12:00 AM, 6th Sept 2025)
-  const unlockDate = new Date("Sep 6, 2025 00:00:00").getTime();
 
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = unlockDate - now;
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Unlock time: 6th Sept 2025, 00:00 local time
+    const unlockDate = new Date("2025-09-06T00:00:00");
 
-    if (distance > 0) {
+    function updateCountdown() {
+      const now = new Date();
+      const diff = unlockDate - now;
+
+      if (diff <= 0) {
+        // Time reached → reload to show cake
+        location.reload();
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
       document.body.innerHTML = `
         <div style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          height:100vh;
           font-family: 'Comic Sans MS', cursive, sans-serif;
-          background-color: #fff8e7; /* creamish */
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          font-size: 2em;
-          color: #ff4d6d;
+          text-align:center;
+          color:#fff;
+          background: linear-gradient(135deg, #fff8e7, #fddde6, #ffe5cc);
+          background-size: 400% 400%;
+          animation: gradientShift 10s ease infinite;
           position: relative;
-          overflow: hidden;
+          overflow:hidden;
         ">
-          <h1>🎈 Not Yet! 🎈</h1>
-          <p style="font-size: 1.2em; color: #444;">This surprise unlocks at 
-            <b>12:00 AM, 6th Sept 2025</b> 🎂
-          </p>
-          <p style="font-weight: bold; margin-top: 10px;">Countdown:</p>
-          <div id="timer" style="font-size: 1.5em; margin-top: 5px;"></div>
+          <div>
+            <h1 style="font-size:3em; margin-bottom:10px;">💖 Not Yet! 💖</h1>
+            <p style="font-size:1.2em;">This surprise unlocks at<br><b>🎂 12:00 AM, 6th Sept 2025 🎈</b></p>
+            <h2 style="margin-top:20px;">Countdown:</h2>
+            <h3 style="font-size:2em;">${days}d ${hours}h ${minutes}m ${seconds}s</h3>
+          </div>
 
-          <!-- floating hearts & balloons -->
-          ${generateFloatingIcons()}
+          <!-- 10 floating balloons -->
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
+          <div class="floating">🎈</div>
         </div>
+
+        <style>
+          @keyframes gradientShift {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+          }
+          .floating {
+            position:absolute;
+            font-size:2.2em;
+            animation: floatUp 10s linear infinite;
+            opacity:0.85;
+          }
+          /* Different positions & delays for 10 balloons */
+          .floating:nth-child(2) { left:5%;  animation-delay:0s; }
+          .floating:nth-child(3) { left:15%; animation-delay:2s; }
+          .floating:nth-child(4) { left:25%; animation-delay:4s; }
+          .floating:nth-child(5) { left:35%; animation-delay:6s; }
+          .floating:nth-child(6) { left:50%; animation-delay:8s; }
+          .floating:nth-child(7) { left:65%; animation-delay:3s; }
+          .floating:nth-child(8) { left:75%; animation-delay:5s; }
+          .floating:nth-child(9) { left:85%; animation-delay:7s; }
+          .floating:nth-child(10){ left:92%; animation-delay:1s; }
+          .floating:nth-child(11){ left:55%; animation-delay:9s; }
+
+          @keyframes floatUp {
+            0% { bottom:-10%; transform:translateY(0) rotate(0deg); }
+            100% { bottom:110%; transform:translateY(-100vh) rotate(360deg); }
+          }
+        </style>
       `;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("timer").innerHTML =
-        days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-    } else {
-      location.reload();
     }
-  }
 
-  // Function to scatter balloons & hearts
-  function generateFloatingIcons() {
-    let icons = "";
-    // 10 balloons
-    for (let i = 0; i < 10; i++) {
-      icons += `<div style="
-        position: absolute;
-        top: ${Math.random() * 80 + 5}%;
-        left: ${Math.random() * 90 + 5}%;
-        font-size: 1.5em;
-      ">🎈</div>`;
+    const now = new Date();
+    if (now < unlockDate) {
+      updateCountdown();
+      setInterval(updateCountdown, 1000); // update every second
     }
-    // 8 hearts
-    for (let i = 0; i < 8; i++) {
-      icons += `<div style="
-        position: absolute;
-        top: ${Math.random() * 80 + 5}%;
-        left: ${Math.random() * 90 + 5}%;
-        font-size: 1.2em;
-      ">💖</div>`;
-    }
-    return icons;
-  }
-
-  setInterval(updateCountdown, 1000);
+    // else → do nothing, cake loads normally
+  });
 </script>
+
 
   
     <meta charset="UTF-8" />
