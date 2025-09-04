@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const now = new Date();
+    const hours = now.getHours();
+
+    // If time is before 12:00 AM (00:00), block access
+    if (hours < 0) return; // invalid, let’s do proper condition
+
+    if (hours >= 0 && hours < 24) {
+      // already past midnight, allow
+    } else {
+      // block
+    }
+  });
+</script>
+
     <meta charset="UTF-8" />
     <title>Candle Blow</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
