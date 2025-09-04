@@ -3,17 +3,42 @@
   <head>
     <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const now = new Date();
-    const hours = now.getHours();
+    // Unlock time: 6th Sept 2025, 00:00 local time
+    const unlockDate = new Date("2025-09-06T00:00:00");
 
-    // If time is before 12:00 AM (00:00), block access
-    if (hours < 0) return; // invalid, let’s do proper condition
+    function updateCountdown() {
+      const now = new Date();
+      const diff = unlockDate - now;
 
-    if (hours >= 0 && hours < 24) {
-      // already past midnight, allow
-    } else {
-      // block
+      if (diff <= 0) {
+        // Time reached → reload to show cake
+        location.reload();
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.body.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;text-align:center;">
+          <div>
+            <h1>⏳ Not Yet!</h1>
+            <p>This surprise unlocks at <b>12:00 AM, 6th Sept 2025</b>.</p>
+            <h2 style="margin-top:20px;">Countdown:</h2>
+            <h3>${days}d ${hours}h ${minutes}m ${seconds}s</h3>
+          </div>
+        </div>
+      `;
     }
+
+    const now = new Date();
+    if (now < unlockDate) {
+      updateCountdown();
+      setInterval(updateCountdown, 1000); // update every second
+    }
+    // else → do nothing, cake loads normally
   });
 </script>
 
