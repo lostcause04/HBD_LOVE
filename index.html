@@ -31,7 +31,7 @@
           font-family: 'Comic Sans MS', cursive, sans-serif;
           text-align:center;
           color:#fff;
-          background: linear-gradient(135deg, #fff8e7, #fddde6, #ffe5cc);
+          background: linear-gradient(135deg, #ff99cc, #ff6699, #ff3366);
           background-size: 400% 400%;
           animation: gradientShift 10s ease infinite;
           position: relative;
@@ -44,16 +44,11 @@
             <h3 style="font-size:2em;">${days}d ${hours}h ${minutes}m ${seconds}s</h3>
           </div>
 
-          <!-- 10 floating balloons -->
+          <!-- floating hearts and balloons -->
           <div class="floating">🎈</div>
+          <div class="floating">💖</div>
           <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
-          <div class="floating">🎈</div>
+          <div class="floating">💖</div>
           <div class="floating">🎈</div>
         </div>
 
@@ -65,21 +60,15 @@
           }
           .floating {
             position:absolute;
-            font-size:2.2em;
-            animation: floatUp 10s linear infinite;
-            opacity:0.85;
+            font-size:2.5em;
+            animation: floatUp 8s linear infinite;
+            opacity:0.8;
           }
-          /* Different positions & delays for 10 balloons */
-          .floating:nth-child(2) { left:5%;  animation-delay:0s; }
-          .floating:nth-child(3) { left:15%; animation-delay:2s; }
-          .floating:nth-child(4) { left:25%; animation-delay:4s; }
-          .floating:nth-child(5) { left:35%; animation-delay:6s; }
-          .floating:nth-child(6) { left:50%; animation-delay:8s; }
-          .floating:nth-child(7) { left:65%; animation-delay:3s; }
-          .floating:nth-child(8) { left:75%; animation-delay:5s; }
-          .floating:nth-child(9) { left:85%; animation-delay:7s; }
-          .floating:nth-child(10){ left:92%; animation-delay:1s; }
-          .floating:nth-child(11){ left:55%; animation-delay:9s; }
+          .floating:nth-child(2) { left:10%; animation-delay:0s; }
+          .floating:nth-child(3) { left:30%; animation-delay:2s; }
+          .floating:nth-child(4) { left:50%; animation-delay:4s; }
+          .floating:nth-child(5) { left:70%; animation-delay:6s; }
+          .floating:nth-child(6) { left:90%; animation-delay:1s; }
 
           @keyframes floatUp {
             0% { bottom:-10%; transform:translateY(0) rotate(0deg); }
